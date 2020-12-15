@@ -5,7 +5,6 @@
 {-# LANGUAGE DuplicateRecordFields     #-}
 {-# LANGUAGE OverloadedStrings    #-}
 
-
 module GitHub where
 
 import Data.Aeson ( FromJSON )
@@ -14,9 +13,16 @@ import Data.Text
 import GHC.Generics
 import Servant.Client         
 import Servant.API
-import Control.Monad    (mzero)
-import           Network.HTTP.Client          (defaultManagerSettings, newManager)
-
+    ( type (:<|>)(..),
+      BasicAuth,
+      BasicAuthData,
+      Capture,
+      JSON,
+      Header,
+      type (:>),
+      Get )
+import Control.Monad          (mzero)
+import Network.HTTP.Client    (defaultManagerSettings, newManager)
 
 type Username  = Text
 type UserAgent = Text
@@ -45,6 +51,4 @@ gitHubAPI = Proxy
 getUser ::          Maybe UserAgent -> Username            -> ClientM GitHubUser
 getRepo :: Maybe UserAgent -> Username -> Reponame -> ClientM GitHubTopics
 
-
 getUser :<|> getRepo = client gitHubAPI
-
