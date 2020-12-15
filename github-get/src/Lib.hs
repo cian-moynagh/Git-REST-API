@@ -16,22 +16,22 @@ module Lib
     ( someFunc
     ) where
 
-import qualified GitHub as GH
-import qualified Servant.Client               as SC
-import           System.Environment           (getArgs)
-import Data.Text hiding (map,intercalate, groupBy, concat)
-import Data.List (intercalate, groupBy, sortBy)
-import Data.Either ( partitionEithers )
-import           Network.HTTP.Client          (newManager)
-import           Network.HTTP.Client.TLS      (tlsManagerSettings)
+import qualified GitHub          as GH
+import qualified Servant.Client  as SC
+import System.Environment           (getArgs)
+import Data.Text hiding             (map,intercalate, groupBy, concat)
+import Data.List                    (intercalate, groupBy, sortBy)
+import Data.Either                  (partitionEithers)
+import Network.HTTP.Client          (newManager)
+import Network.HTTP.Client.TLS      (tlsManagerSettings)
 
 
 someFunc :: IO ()
 someFunc = do
-  putStrLn "Let's try a GitHubCall"
+  putStrLn "Test code..."
   (rName:rep:_) <- getArgs
-  putStrLn $ "name is " ++ rName
-  putStrLn $ "repo is " ++ rep
+  putStrLn $ "Name of user: " ++ rName
+  putStrLn $ "Name of repo: " ++ rep
 
   let n = pack rName
 
@@ -43,7 +43,7 @@ testGitHubCall name rep =
   (SC.runClientM (GH.getUser (Just "haskell-app") name) =<< env) >>= \case
 
     Left err -> do
-      putStrLn $ "heuston, we have a problem: " ++ show err
+      putStrLn $ "Error: " ++ show err
     Right res -> do
       putStrLn $ "the votes of the github jury are " ++ show res
 
@@ -54,10 +54,7 @@ testGitHubCall name rep =
            putStrLn $ "the votes of the github jury are " ++ show res'
 
 
-
-
-
-  where env :: IO SC.ClientEnv
+where env :: IO SC.ClientEnv
         env = do
           manager <- newManager tlsManagerSettings
           return $ SC.mkClientEnv manager (SC.BaseUrl SC.Http "api.github.com" 80 "")
